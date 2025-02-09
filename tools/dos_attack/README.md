@@ -1,10 +1,11 @@
 # DoS Attack Tool
 
-This tool simulates a Denial of Service (DoS) attack by sending a high volume of requests to a specified target IP and port. It's intended for educational purposes and should only be used in controlled environments or with explicit permission.
+This tool simulates a **SYN Flood attack** by sending a high volume of requests to a specified target IP and port.  
+It is intended for **educational purposes only** and should **only be used on networks you own or have explicit permission to test**.
 
 ## Purpose
-The DoS Attack Tool is designed to stress-test systems and observe how they handle a flood of requests, helping in understanding the limits of a network or service.
+The **DoS Attack Tool** is designed to stress-test systems and observe how they handle a flood of requests, helping in understanding network and service limits.
 
 ## Usage
 ```bash
-python dos_attack.py
+python3 Dos.py --target <IP> --port <PORT> --count <NUM> --threads <THREADS> --rate <RATE>
