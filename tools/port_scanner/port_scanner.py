@@ -1,5 +1,8 @@
 import socket
 import threading
+import time
+import re
+from concurrent.futures import ThreadPoolExecutor
 
 # Common ports and their typical services
 COMMON_PORTS = {
@@ -24,53 +27,41 @@ def grab_banner(ip, port):
         sock.settimeout(2)
         sock.connect((ip, port))
 
-        if port == 80 or port == 443:
-            sock.sendall(b"HEAD / HTTP/1.1\r\nHost: " + bytes(ip, 'utf-8') + b"\r\n\r\n")
-        elif port == 21:
-            sock.sendall(b"HELP\r\n")
+        # Send a simple newline to trigger a response
+        sock.sendall(b"\r\n")
 
         banner = sock.recv(1024).decode("utf-8").strip()
-        return banner
+        return banner if banner else "No response"
     except Exception:
-        return None
+        return "No response"
     finally:
         sock.close()
 
-# Function to scan a port and format the output
+# Function to scan a port and determine status
 def scan_port(ip, port, timeout):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.settimeout(timeout)
     try:
         result = sock.connect_ex((ip, port))
-        if result == 0:
-            # Port is open
-            service = COMMON_PORTS.get(port, "Unknown Service")
-            print(f"Port {port} - OPEN   - {service}")
-            
-            # Try to grab a banner and display additional protocol information
+
+        if result == 0:  # Only show open ports
             banner = grab_banner(ip, port)
-            if banner:
-                print(f"  Common Port: {service}")
-                print(f"  Banner Grabbing: {banner}")
-                
-                # Extract additional details if it's HTTP
-                if "Date:" in banner:
-                    for line in banner.splitlines():
-                        if line.startswith("Date:") or line.startswith("Server:") or line.startswith("X-Powered-By:"):
-                            print(f"  Protocol Detection: {line}")
+            
+            if banner and banner != "No response":
+                print(f"Port {port} - OPEN - Detected: {banner}")
             else:
-                print(f"  Common Port: {service}")
-                print("  Banner Grabbing: No banner retrieved")
-        else:
-            print(f"Port {port} - CLOSED")
+                service = COMMON_PORTS.get(port, "Unknown Service")
+                print(f"Port {port} - OPEN - {service}")
+
     finally:
         sock.close()
 
+# Main function to handle input and scanning
 def main():
     ip = input("Enter the IP address to scan: ")
     start_port = int(input("Enter the start port: "))
     end_port = int(input("Enter the end port: "))
-    
+
     # Speed options with corresponding timeout values
     print("\nSelect scan speed:")
     print("1. Slow (default)")
@@ -89,23 +80,11 @@ def main():
         thread_count = 20
 
     print(f"\nStarting scan on {ip} from port {start_port} to {end_port} with timeout {timeout}s...\n")
-    
-    # Run scan with multithreading
-    threads = []
-    for port in range(start_port, end_port + 1):
-        thread = threading.Thread(target=scan_port, args=(ip, port, timeout))
-        threads.append(thread)
-        thread.start()
-        
-        # Control the number of active threads
-        if len(threads) >= thread_count:
-            for t in threads:
-                t.join()
-            threads = []
-    
-    # Ensure all remaining threads complete
-    for t in threads:
-        t.join()
+
+    # Use ThreadPoolExecutor for better threading
+    with ThreadPoolExecutor(max_workers=thread_count) as executor:
+        for port in range(start_port, end_port + 1):
+            executor.submit(scan_port, ip, port, timeout)
 
 if __name__ == "__main__":
     main()
