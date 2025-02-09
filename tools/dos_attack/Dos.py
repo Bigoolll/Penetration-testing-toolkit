@@ -1,7 +1,3 @@
-#!/usr/bin/python3
-# Emre Ovunc
-# info@emreovunc.com
-# Improved Python3 SYN Flood Tool CMD v3.0
 
 from sys import stdout, exit
 from scapy.all import *
