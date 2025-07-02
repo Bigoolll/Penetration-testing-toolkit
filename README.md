@@ -10,7 +10,7 @@ A simple, customizable toolkit designed for educational penetration testing purp
 
 ### Technologies Used
 - **Python**: Core programming language
-- **Key Libraries**: `socket`, `paramiko` (for SSH brute-forcing), and others
+- **Key Libraries**: `socket`, `streamlit`
 
 > **Disclaimer**: This toolkit is intended for educational purposes only. Use responsibly and only on networks you own or have explicit permission to test.
 
