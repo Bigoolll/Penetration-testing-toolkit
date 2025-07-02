@@ -44,7 +44,7 @@ def SYN_Flood_Threaded(dstIP, dstPort, total_packets, threads, rate_limit):
     return results
 
 # —— Streamlit UI —— #
-st.title("💥 Streamlit DoS Tool (SYN Flood)")
+st.title("💥Dos Attack (SYN Flood)")
 
 st.warning("⚠️ Only test systems you own or have explicit permission to test!")
 

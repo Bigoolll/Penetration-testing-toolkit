@@ -66,7 +66,7 @@ def run_scan(ip, start_port, end_port, timeout, threads):
     return sorted(results, key=lambda l: int(l.split()[1]))
 
 def main():
-    st.title("🔍 Port Scanner (Batch Output)")
+    st.title("🔍 Port Scanner")
     ip = st.text_input("Target IP")
     col1, col2 = st.columns(2)
     start_port = col1.number_input("Start Port", min_value=1, max_value=65535, value=1)

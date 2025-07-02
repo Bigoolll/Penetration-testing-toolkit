@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 # ——————————————————————————————————————————————————————————————————
 # Streamlit page config + CSS
 # ——————————————————————————————————————————————————————————————————
-st.set_page_config(page_title="Universal Brute-Force", layout="wide")
+st.set_page_config(page_title="Passowrds Brute-Forcing", layout="wide")
 st.markdown("""
     <style>
     .stButton>button { background-color:#0f3460; color:white; border-radius:5px; padding:8px 16px; }

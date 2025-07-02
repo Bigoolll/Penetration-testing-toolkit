@@ -3,7 +3,7 @@ import requests
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 st.set_page_config(page_title="Dir Enumerator", layout="wide")
-st.title("⚡ Fast Directory Enumerator (Threaded)")
+st.title("⚡Directory Enumerator ")
 
 st.markdown("""
 Enter a target URL and upload a `.txt` wordlist. The scanner uses **50 threads** and a **10-second timeout** per request.
